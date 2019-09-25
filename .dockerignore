@@ -1,0 +1,10 @@
+main.code-workspace
+Dockerfile
+docker-compose.yaml
+node_modules
+.env
+.gitignore
+.git
+yarn-error.log
+nginx.crt
+nginx.key
