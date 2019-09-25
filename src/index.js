@@ -14,7 +14,7 @@ require('dotenv').config()
 const logger = require('pino')({level: process.env.LOG_LEVEL})
 
 // ? Http(s) server
-var express = require('express')();
+var app = require('express')();
 
 // ? If ssl enabled import certificates
 var httpdOptions = (process.env.PROTOCOL_TYPE === 'http') ? {} : {
@@ -23,13 +23,13 @@ var httpdOptions = (process.env.PROTOCOL_TYPE === 'http') ? {} : {
     };
 
 // ? Create server with Http(s)    
-httpd = require(process.env.PROTOCOL_TYPE).createServer(httpdOptions, express);
+httpd = require(process.env.PROTOCOL_TYPE).createServer(httpdOptions, app);
 
 // ? Init socket.io with Http(s) server
 io = require('socket.io')(httpd);
 
 // ? Route index of server
-express.get('/', function(req, res) {
+app.get('/', function(req, res) {
     res.header("X-powered-by","TheYkk");
     res.send('ok');
 });
@@ -72,18 +72,6 @@ io.use(jwt.authorize({
 // ? Users object
 var users = {};
 
-// ? Socket id to user id
-function getID(id) {
-    let uid = null;
-    Object.keys(users).forEach(function(key) {
-        if(users[key].socket == id) {
-            uid = key;
-        }
-    });
-
-    return uid;
-}
-
 // ? On client connect
 io.on('connect', function(socket) {
     let user;
@@ -97,15 +85,14 @@ io.on('connect', function(socket) {
     
     // ? On Client close the connection
     socket.on('disconnect', () => {
-        logger.info('Client disconnected : ',{socketID:ID,userID:getID(ID)})
+        logger.debug('Client disconnected : ',{socketID:ID,userID:user.userid})
         // ? Delete user from global object
-        delete users[getID(ID)];
+        delete users[user.userid];
     });
-    
     
     // ? On client send message
     socket.on('message',(m) =>{
-        /**
+        /** Message object
          ** msgFrom
          ** msgTo
          ** msg
@@ -139,5 +126,5 @@ io.on('connect', function(socket) {
 process.on('uncaughtException', function (err) {
     logger.fatal((new Date).toUTCString() + ' uncaughtException:', err.message);
     logger.fatal(err.stack);
-    //process.exit(1);
+    //!process.exit(1);
 });
