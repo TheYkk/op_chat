@@ -9,3 +9,6 @@
 - Docker compose
 - DotENV
 - Socketio-jwt
+
+## Todos
+- [ ] Send old messages
