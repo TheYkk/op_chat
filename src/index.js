@@ -91,30 +91,64 @@ io.on('connect', function(socket) {
     });
     
     // ? On client send message
-    socket.on('message',(m) =>{
+    socket.on('send-message',(m) =>{
         /** Message object
          ** msgFrom
          ** msgTo
          ** msg
          * 
          */    
-
+        m.msgFrom = user.userid;
+        
         // ? Save to mongodb
         const mes = new Chat(m);
-        mes.save().then(() => logger.trace('Message added : ',m));
+        mes.save().then(() => {
+            logger.trace('Message added : ',mes)
 
-        // ? Send message to client 
-        socket.emit("message", m);
+            m.createdAt = mes.createdAt;
+            m.updatedAt = mes.updatedAt;
 
-        // ? If user active send message with socket emit
-        if(users[m.msgTo] !== undefined ){
-            io.to(users[m.msgTo].socket).emit("message", m);
-            logger.trace(`Message send from : ${m.msgFrom} to : ${m.msgTo} msg:  ${m.msg} `);
-        }else{
-            logger.debug('User not online : '+m.msgTo,users)
-        }
+            // ? Send message to client 
+            socket.emit("message", Object.assign(m,{"own":true}));
 
+            // ? If user active send message with socket emit
+            if(users[m.msgTo] !== undefined ){
+                io.to(users[m.msgTo].socket).emit("message", Object.assign(m,{"own":false}));
+                logger.trace(`Message send from : ${m.msgFrom} to : ${m.msgTo} msg:  ${m.msg} `);
+            }else{
+                socket.emit("message", Object.assign(m,{"own":false,"msgFrom":m.msgTo,"msgTo":m.msgFrom}));
+                logger.debug('User not online : '+m.msgTo,users)
+            }
+        });
     });
+    socket.on('get-message',(m) =>{
+        /** Message object
+            {to:this.currentConversation,
+            from:UserSettings.id,
+            lastdate:this.messages[this.currentConversation][0].createdAt}
+         * 
+         */    
+        
+        mes.save().then(() => {
+            logger.trace('Message added : ',mes)
+
+            m.createdAt = mes.createdAt;
+            m.updatedAt = mes.updatedAt;
+
+            // ? Send message to client 
+            socket.emit("message", Object.assign(m,{"own":true}));
+
+            // ? If user active send message with socket emit
+            if(users[m.msgTo] !== undefined ){
+                io.to(users[m.msgTo].socket).emit("message", Object.assign(m,{"own":false}));
+                logger.trace(`Message send from : ${m.msgFrom} to : ${m.msgTo} msg:  ${m.msg} `);
+            }else{
+                socket.emit("message", Object.assign(m,{"own":false,"msgFrom":m.msgTo,"msgTo":m.msgFrom}));
+                logger.debug('User not online : '+m.msgTo,users)
+            }
+        });
+    });
+    
     // ? Send  server are live to client
     socket.emit('live');
     setInterval(() => {

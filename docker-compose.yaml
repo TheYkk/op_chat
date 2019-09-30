@@ -4,6 +4,8 @@ services:
     container_name: nodejs-mongo
     restart: always
     build: ./
+    environment:
+    - MONGO="mongodb://mongo/op_chat"
     ports:
       - "3256:3256"
     volumes:

@@ -1,4 +1,4 @@
-var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoieXVzdWZrYWFuMTQyQGdtYWlsLmNvbSIsInN1YiI6NywiaXNzIjoiaHR0cDovLzcyNC1kZXYubG9jYWwvcGFuZWwvdG9rZW4iLCJpYXQiOjE1Njk0MDY3OTQsImV4cCI6MTU2OTQxMDM5NCwibmJmIjoxNTY5NDA2Nzk0LCJqdGkiOiJkM1ppdm5jTzRYN0hoUkhoIn0.J9pUMnBPOTmRlEApRkYKKDSCZmhUKVoPkfNn77FkQx0";
+var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoieXVzdWZrYWFuMTQyQGdtYWlsLmNvbSIsInN1YiI6OCwiaXNzIjoiaHR0cDovLzcyNC1kZXYubG9jYWwvcGFuZWwvdG9rZW4iLCJpYXQiOjE1Njk0MDY3OTQsImV4cCI6MTU2OTgxMDM5NCwibmJmIjoxNTY5NDA2Nzk0LCJqdGkiOiJkM1ppdm5jTzRYN0hoUkhoIn0.8_SAWGKWzlxCMQJAQF_NfLkqI9z73zehCq3lAgrTQqM";
 
 var socket = io('https://localhost:3256', {
             'query': 'token=' + token
