@@ -166,7 +166,7 @@ io.on('connect', function(socket) {
                 $in:[mto.to,user.userid]
             },
             msgFrom:{
-                $in:[mto.from,user.userid]
+                $in:[mto.to,user.userid]
             },
             createdAt:{
                 $lt:mto.lastdate
