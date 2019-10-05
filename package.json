@@ -8,6 +8,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.7.1",
     "pino": "^5.13.3",
+    "saslprep": "^1.0.3",
     "socket.io": "^2.3.0",
     "socketio-jwt": "^4.5.0"
   }
